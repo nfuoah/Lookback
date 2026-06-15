@@ -116,8 +116,9 @@ section.active {
     align-items: center;
     justify-content: center;
     flex: 1;
-    gap: 40px; /* 시야 박스와 대화창 사이의 간격 */
+    gap: 40px;
     padding-bottom: 60px;
+    text-align: center;
 }
 
 .day1-container p {
@@ -441,7 +442,8 @@ section.active {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    transition: background-image 0.5s ease-in-out; /* 배경 바뀔 때 부드럽게 */
+    transition: background-image 0.5s ease-in-out;
+
 }
 
 /* 엔딩 자막 구역 고정 정렬 */
