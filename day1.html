@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="day1-wrap">
+    <div class="day1-container">
+        <p>Day <span class="current-day-view">1</span></p>
+        <div id="game-screen">
+            <div class="bg-pan"></div>
+
+            <div class="character-wrap">
+                <img id="char-img" src="" class="cha_img">
+                <img id="effect-img" src="" alt="이펙트" class="effect_img">
+            </div>
+
+            <div id="choice-modal" style="display:none">
+                <p id="choice-situation"></p>
+                <div class="choice-timer-bg">
+                    <div id="choice-timer-bar"></div>
+                </div>
+                <div id="choice-buttons"></div>
+            </div>
+
+            <div id="minigame-modal" style="display:none">
+                <p>스페이스바를 10번 연타하세요!</p>
+                <p>남은 시간: <span id="mini-time">5</span>초</p>
+                <p>현재 횟수: <span id="mini-count">0</span> / 10</p>
+            </div>
+        </div>
+
+        <div id="dia-box">
+            <div class="text-wrap">
+                <h2 id="dia-speaker"></h2>
+                <div class="text-box">
+                    <p id="dia-text">대화</p>
+                    <button class="nextdia-btn">▼</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="day-transition-screen" style="display: none;">
+            <div class="transition-content">
+                <h1 id="transition-day-title">Day 2</h1>
+                <p id="transition-day-subtitle">어젯밤의 업보가 돌아왔습니다.</p>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script src="common.js"></script>
+
+</body>
+</html>

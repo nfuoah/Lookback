@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="day1-wrap">
+    <div class="day-header">
+        <p>EPILOGUE</p>
+    </div>
+
+    <div class="day1-container">
+
+        <div id="ending-cutscene">
+            <div class="ending-bg-canvas"></div>
+
+<!--            <div class="character-wrap">-->
+<!--                <img id="ending-char-img" src="" class="cha_img" style="display:none;">-->
+<!--            </div>-->
+        </div>
+
+        <div id="ending-dia-box">
+            <div class="text-wrap">
+                <div class="text-box">
+                    <p id="cutscene-text">엔딩 시나리오</p>
+                </div>
+
+                <button id="show-report-btn" style="display: none;">나의 행동 분석 리포트 확인하기</button>
+            </div>
+        </div>
+
+        <div id="result-report-page" style="display: none;">
+            <div class="report-container">
+                <h1 class="report-main-title">최종 행동 분석 리포트</h1>
+                <p class="report-subtitle">내 대화 성향과 통계를 확인해보세요.</p>
+
+                <div class="report-grid">
+                    <div class="rank-badge-zone">
+                        <p class="title-label">나의 인성 등급</p>
+                        <div id="report-rank-char">A</div>
+                        <p id="report-rank-title">[PRO 개과천선러]</p>
+                    </div>
+                    <div class="score-data-zone">
+                        <div class="data-row"><span class="label">최종 매너 점수</span><span class="value" id="report-score-val">0점</span></div>
+                        <div class="data-row"><span class="label">무례의 굴레 탈출</span><span class="value" id="report-day-val">Day 1</span></div>
+                    </div>
+                </div>
+
+                <div class="report-review-box">
+                    <p class="review-label">종합 평가</p>
+                    <p id="report-review-text">평가 내용</p>
+                </div>
+
+                <div class="report-stats-box">
+                    <div class="stat-item">
+                        <span class="stat-label">가장 취약했던 상황</span>
+                        <span class="stat-value" id="report-weak-situation">분석 중...</span>
+                    </div>
+                </div>
+
+                <button id="game-restart-btn" onclick="location.href='index.html'">메인 화면으로</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+</body>
+
+<script src="common.js"></script>
+
+</html>

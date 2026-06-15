@@ -1,0 +1,582 @@
+/* 공통 및 세션 제어 */
+section {
+    display: none;
+}
+section.active {
+    display: block;
+}
+
+/* 전체 배경 (캡처본 스타일) */
+.day1-wrap {
+    width: 100%;
+    height: 100vh;
+    background-color: #0b0b0b; /* 블랙 톤 */
+    display: flex;
+    flex-direction: column;
+    color: #ffffff;
+    font-family: sans-serif;
+}
+
+/* ==========================================================================
+   [신규] 게임 타이틀 메인 화면 스타일 (#screen-title)
+   ========================================================================== */
+#screen-title {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #08080a; /* 인게임보다 조금 더 깊은 암흑 톤 */
+    /* 미세한 모눈종이나 노이즈 느낌의 그라데이션으로 분위기 연출 */
+    background-image:
+            radial-gradient(rgba(30, 30, 40, 0.2) 1px, transparent 0),
+            radial-gradient(rgba(30, 30, 40, 0.2) 1px, transparent 0);
+    background-size: 20px 20px;
+    background-position: 0 0, 10px 10px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999999; /* 모든 인게임 화면을 덮음 */
+    color: #ffffff;
+    font-family: sans-serif;
+}
+
+/* 중앙 정렬용 내부 컨테이너 */
+.title-inner {
+    text-align: center;
+    max-width: 600px;
+    padding: 20px;
+}
+
+/* 상단 서브 타이틀 (시적인 문구) */
+.title-sub {
+    font-size: 15px;
+    color: #888896;
+    letter-spacing: 3px; /* 글자 사이 간격을 넓혀 감성적인 느낌 추가 */
+    margin-bottom: 15px;
+    font-weight: 400;
+    word-break: keep-all;
+}
+
+/* 메인 로고 (◀◀ Look Back) */
+.title-logo {
+    font-size: 56px;
+    font-weight: 900;
+    letter-spacing: -1px;
+    margin: 0 0 25px 0;
+    color: #ffffff;
+    /* 되감기 버튼과 타이틀에 은은한 네온 글로우 효과를 줘서 비디오 아트 감성 연출 */
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.3), 0 0 20px rgba(255, 152, 0, 0.4);
+}
+
+/* 로고 하단 설명글 */
+.title-desc {
+    font-size: 16px;
+    color: #b0b0bc;
+    line-height: 1.8;
+    margin-bottom: 50px; /* 버튼과의 여백 확보 */
+    font-weight: 300;
+    word-break: keep-all;
+}
+
+/* 게임 시작 버튼 */
+.btn-start {
+    background-color: transparent;
+    color: #ffffff;
+    border: 2px solid #FF9800FF; /* 포인트 컬러인 블루 라인 */
+    padding: 16px 60px;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 40px; /* 둥근 캡슐 형태 디자인 */
+    cursor: pointer;
+    box-shadow: 0 0 15px rgba(255, 152, 0, 0.4);
+
+    /* 호버 애니메이션을 위한 트랜지션 효과 */
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    letter-spacing: 2px;
+    text-indent: 2px; /* 글자 간격 넓어질 때 완벽한 중앙 정렬 맞춤 */
+}
+
+/* 버튼 마우스 호버(Hover) 효과 */
+.btn-start:hover {
+    background-color: #FF9800FF; /* 라인 컬러가 내부로 꽉 채워짐 */
+    box-shadow: 0 0 25px rgba(255, 152, 0, 0.4); /* 불빛이 번지는 연출 */
+    transform: translateY(-3px); /* 살짝 위로 떠오르는 모션 추가 */
+}
+
+/* 버튼 클릭(Active) 효과 */
+.btn-start:active {
+    transform: translateY(-1px);
+}
+
+.day1-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    gap: 40px; /* 시야 박스와 대화창 사이의 간격 */
+    padding-bottom: 60px;
+}
+
+.day1-container p {
+    font-size: 30px;
+    font-weight: 600;
+}
+
+/* ==========================================================================
+   [핵심] 중앙 게임 시야 박스 및 배경 펜 효과
+   ========================================================================== */
+#game-screen {
+    position: relative;
+    width: 800px;        /* 캡처본 비율에 맞춘 가로 크기 */
+    height: 400px;       /* 세로 크기 */
+    border-radius: 16px; /* 둥근 모서리 감성 */
+    overflow: hidden;    /* ★중요: 이 박스를 벗어나는 긴 이미지는 숨김 */
+    background-color: #1a1b20; /* 이미지 로드 전 기본 박스 색상 */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+/* 박스 내부에서 움직일 가로로 더 긴 배경 이미지 */
+.bg-pan {
+    position: absolute;
+    top: -10%;
+    left: -10%;
+    width: 120%;
+    height: 120%;
+    background-image: url('image/room01.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    transition: transform 0.15s ease-out, background-image 0.4s ease-in-out;
+    will-change: transform;
+}
+
+/* 캐릭터 및 이펙트 배치 */
+.character-wrap {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+    pointer-events: none;
+}
+
+.cha_img {
+    display: none;
+    height: 350px; /* 박스 높이(400px)에 맞춤 */
+}
+
+.effect_img {
+    display: none;
+    position: absolute;
+    top: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+}
+
+
+
+/* ==========================================================================
+   하단 대화창 레이아웃 (새 디자인으로 통일)
+   ========================================================================== */
+#dia-box {
+    width: 800px; /* 시야 박스와 가로폭 일치 */
+}
+
+.text-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+/* 화자 이름 상자 */
+#dia-speaker {
+    font-size: 20px;
+    font-weight: bold;
+    color: #ffffff;
+    margin-bottom: 15px;
+    background-color: #22252c;
+    border-radius: 20px;
+    padding: 6px 24px;
+}
+
+/* 대화창 내부 텍스트 스타일링 */
+.text-box {
+    width: 100%;
+    text-align: center;
+    position: relative;
+}
+
+#dia-text {
+    font-size: 18px;
+    color: #e0e0e0;
+    line-height: 1.8;
+    letter-spacing: -0.5px;
+    word-break: keep-all;
+}
+
+.nextdia-btn {
+    background: none;
+    border: none;
+    color: #FF9800FF; /* 푸른색 화살표 포인트 */
+    font-size: 14px;
+    cursor: pointer;
+    margin-top: 10px;
+    display: block;
+    width: 100%;
+    animation: blink 1.5s infinite;
+}
+
+/* ==========================================================================
+   [신규] 레이아웃에 깊이를 더하는 효과 레이어 (레드 & 블랙)
+   ========================================================================== */
+
+/* 1. Day가 길어질수록 화면을 점점 어둡게 만드는 암전 레이어 (before) */
+/*기존 #game-screen 스타일에서 transition 구역만 추가/보완해주면 돼 */
+#game-screen {
+    position: relative;
+    width: 800px;
+    height: 400px;
+    border-radius: 16px;
+    overflow: hidden;
+    background-color: #1a1b20;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    transition: filter 0.5s ease-in-out;
+}
+
+/* ==========================================================================
+   선택지 모달창 및 타이머 (시야 박스 내부 중앙 고정)
+   ========================================================================== */
+#choice-modal {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(26, 27, 32, 0.95);
+    border: 2px solid #FF9800FF;
+    border-radius: 16px;
+    padding: 25px;
+    z-index: 100;
+    width: 80%;
+    max-width: 500px;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+.choice-situation {
+    font-size: 18px;
+    font-weight: bold;
+    color: #ffffff;
+    margin-bottom: 15px;
+}
+
+.choice-timer-bg {
+    width: 100%;
+    height: 10px;
+    background: #22252c;
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 16px 0;
+}
+
+#choice-timer-bar {
+    width: 100%;
+    height: 100%;
+    background: orangered;
+    transition: width 0.1s linear;
+}
+
+.choice-btn-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.choice-btn {
+    width: 100%;
+    background: #22252c;
+    color: #ffffff;
+    border: 1px solid #444;
+    padding: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 15px;
+    transition: background 0.2s;
+}
+
+.choice-btn:hover {
+    background: #FF9800FF;
+    border-color: #FF9800FF;
+}
+
+/* ==========================================================================
+   미니게임 모달창 (시야 박스 내부 중앙 고정)
+   ========================================================================== */
+#minigame-modal {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    max-width: 450px;
+    background: rgba(20, 20, 20, 0.95);
+    color: white;
+    padding: 30px;
+    border-radius: 20px;
+    border: 2px solid #ff9800;
+    text-align: center;
+    z-index: 1000;
+    box-sizing: border-box;
+}
+
+#minigame-modal h3 {
+    font-size: 20px;
+    margin-top: 0;
+    margin-bottom: 15px;
+    word-break: keep-all;
+    color: #ff9800;
+}
+
+.mini-timer-text {
+    font-size: 16px;
+    margin-bottom: 15px;
+}
+
+.command-wrap {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin: 20px 0;
+}
+
+.arrow-box {
+    width: 40px;
+    height: 40px;
+    border: 2px solid #555;
+    background-color: #222;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    font-weight: bold;
+    border-radius: 8px;
+}
+
+.arrow-box.success {
+    background-color: #4caf50;
+    border-color: #4caf50;
+}
+
+.arrow-box.current {
+    border-color: #ff9800;
+    box-shadow: 0 0 10px #ff9800;
+}
+
+/* 애니메이션 */
+@keyframes blink {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 1; }
+}
+
+#day-transition-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #000000; /* 완전 블랙 배경 */
+    z-index: 99999; /* 모든 게임 화면, 모달보다 무조건 위에 뜸 */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out; /* 스르륵 켜지고 꺼지는 효과 */
+}
+
+.transition-content {
+    text-align: center;
+    color: #ffffff;
+}
+
+#transition-day-title {
+    font-size: 64px;
+    font-weight: 900;
+    letter-spacing: 2px;
+    margin-bottom: 20px;
+    /* 약간 감성적인 타이포 연출을 위해 브레스 효과나 펄스 효과를 줘도 예쁨 */
+}
+
+#transition-day-subtitle {
+    font-size: 20px;
+    color: #888888; /* 서브텍스트는 연한 회색으로 감성 주기 */
+    font-weight: 400;
+    word-break: keep-all;
+}
+
+
+/*엔딩*/
+
+/* 1단계: 엔딩 컷씬 화면 스타일 */
+/* 엔딩 전용 시야 박스 틀 (인게임 #game-screen과 비율/크기 일치) */
+#ending-cutscene {
+    position: relative;
+    width: 800px;
+    height: 400px;
+    border-radius: 16px;
+    overflow: hidden;
+    background-color: #1a1b20;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+}
+
+/* 엔딩 전용 일러스트 배경 캔버스 */
+.ending-bg-canvas {
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    transition: background-image 0.5s ease-in-out; /* 배경 바뀔 때 부드럽게 */
+}
+
+/* 엔딩 자막 구역 고정 정렬 */
+#ending-dia-box {
+    width: 800px;
+    height: 140px;
+}
+
+/* 리포트 보러가기 버튼 연출 보완 */
+#show-report-btn {
+    background-color: #FF9800FF;
+    color: #ffffff;
+    border: none;
+    padding: 12px 35px;
+    font-size: 15px;
+    font-weight: bold;
+    border-radius: 25px;
+    cursor: pointer;
+    margin-top: 15px;
+    box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+    transition: all 0.2s ease;
+}
+/*#show-report-btn:hover {*/
+/*    background-color: #2563eb;*/
+/*    transform: scale(1.05);*/
+/*}*/
+
+#cutscene-text {
+    color: #fff; font-size: 20px; line-height: 1.8; word-break: keep-all; margin-bottom: 25px;
+}
+
+#show-report-btn {
+    margin-top: 30px;
+    background-color: #FF9800FF;
+    color: #ffffff;
+    border: none;
+    padding: 14px 40px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 30px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(255, 152, 0, 0.4);
+    transition: transform 0.2s, background 0.2s;
+}
+
+/*#show-report-btn:hover {*/
+/*    background-color: #2563eb;*/
+/*    transform: scale(1.05);*/
+/*}*/
+
+/* 2단계: 최종 리포트 모달 스타일 */
+#result-report-page {
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+    background-color: rgba(10, 10, 12, 0.96); z-index: 10000;
+    display: flex; align-items: center; justify-content: center;
+}
+.report-container {
+    background: #1e1e24; border: 2px solid #333; border-radius: 20px;
+    padding: 40px; width: 90%; max-width: 550px; color: #fff; text-align: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+.report-main-title {
+    font-size: 24px; margin-bottom: 30px; border-bottom: 1px solid #333; padding-bottom: 15px;
+}
+/* 리포트 서브타이틀 */
+.report-subtitle {
+    font-size: 14px;
+    color: #aaa;
+    margin-top: -20px;
+    margin-bottom: 30px;
+}
+
+/* 추가 통계 데이터 박스 */
+.report-stats-box {
+    background: #141416;
+    border-radius: 10px;
+    padding: 20px;
+    text-align: left;
+    margin-bottom: 30px;
+    border: 1px dashed #333;
+}
+
+.stat-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.stat-label {
+    font-weight: bold;
+    color: #888;
+    font-size: 14px;
+}
+
+.stat-value {
+    font-weight: bold;
+    color: #ff4a4a; /* 취약한 상황이므로 경고 느낌의 붉은 계열 포인트 */
+    font-size: 16px;
+}
+.report-grid {
+    display: flex; justify-content: space-around; align-items: center; margin-bottom: 30px;
+}
+.rank-badge-zone {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+#report-rank-char {
+    font-size: 72px;
+    font-weight: 900;
+    margin: 10px 0;
+    line-height: 1;
+}
+#report-rank-title {
+    font-weight: bold; font-size: 16px; color: #aaa;
+}
+.score-data-zone {
+    display: flex; flex-direction: column; gap: 15px; text-align: left;
+}
+.data-row {
+    border-bottom: 1px dashed #444; padding-bottom: 5px; width: 200px;
+    display: flex; justify-content: space-between;
+}
+.data-row .label { color: #888; }
+.data-row .value { font-weight: bold; font-size: 18px; }
+
+.report-review-box {
+    background: #141416; border-radius: 10px; padding: 20px; text-align: left; margin-bottom: 30px;
+}
+.review-label { font-weight: bold; color: #ff9800; margin-bottom: 8px; font-size: 14px;}
+#report-review-text { font-size: 14px; line-height: 1.6; color: #ccc; word-break: keep-all; }
+
+#game-restart-btn {
+    background: #ff9800; color: #fff; border: none; padding: 12px 35px;
+    font-size: 16px; font-weight: bold; border-radius: 8px; cursor: pointer; transition: 0.2s;
+}
+
+@keyframes blink { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
