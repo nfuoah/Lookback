@@ -349,7 +349,7 @@ const day2Scenarios = [
     {location: '카페', type: 'dialogue', speaker: '', bg: 'image/cafe01-3.png', text: '학교 일과가 끝나고, 오랜만에 공부하러 카페로 이동했다.'},
     {location: '카페', type: 'dialogue', speaker: '', text: '주문을 하려는데 오늘따라 키오스크 터치스크린이 먹통이 되고 결제 오류가 계속 뿜어져 나온다.'},
     {location: '카페', type: 'dialogue', speaker: '주인공', text: '아... 짜증나게 왜 안되는거야',},
-    {location: '카페', type: 'dialogue', speaker: '주인공', text: '저기... 죄송한데, 카운터에서 결제 되나요?', bg: 'image/coffee01-4.png'},
+    {location: '카페', type: 'dialogue', speaker: '주인공', text: '저기... 죄송한데, 카운터에서 결제 되나요?', bg: 'image/cafe01-4.png'},
     {location: '카페', type: 'dialogue', speaker: '알바생', checkHistory: '카페', rudeText: '...',},
     {location: '카페', type: 'dialogue', speaker: '주인공', checkHistory: '카페', rudeText: '저기요?',},
     {location: '카페', type: 'dialogue', speaker: '알바생', checkHistory: '카페', rudeText: '하..',},
